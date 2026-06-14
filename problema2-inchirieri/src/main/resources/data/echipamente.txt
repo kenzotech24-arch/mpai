@@ -1,0 +1,7 @@
+Microscop Optic;Microscop pentru laborator biologie;true
+Proiector Epson;Proiector pentru prezentari;true
+Schi Rossignol;Schiuri pentru zapada;false
+Bicicleta MTB;Bicicleta de munte 26 inch;true
+Set Unelte;Set complet unelte menaj;true
+Cortina Scenica;Cortina pentru spectacole;false
+Ruleta Laser;Ruleta laser de masurare;true

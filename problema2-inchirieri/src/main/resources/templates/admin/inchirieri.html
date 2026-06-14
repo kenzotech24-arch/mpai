@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin - Inchirieri</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Administrator - Cereri Inchiriere</h2>
+    <div class="mb-3">
+        <a href="/home" class="btn btn-secondary btn-sm">Acasa</a>
+        <a href="/admin/echipamente" class="btn btn-info btn-sm">Echipamente</a>
+    </div>
+
+    <div th:if="${mesaj}" class="alert alert-success" th:text="${mesaj}"></div>
+
+    <form method="get" action="/admin/inchirieri" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <input type="email" name="email" class="form-control" placeholder="Filtreaza dupa email" th:value="${filterEmail}"/>
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="echipament" class="form-control" placeholder="Filtreaza dupa echipament" th:value="${filterEchipament}"/>
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">Toate statusurile</option>
+                <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s.name() == filterStatus}"></option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Filtreaza</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th><th>Utilizator</th><th>Email</th><th>Echipament</th><th>De la</th><th>Pana la</th><th>Scop</th><th>Status</th><th>Actiune</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="i : ${inchirieri}">
+            <td th:text="${i.id}"></td>
+            <td th:text="${i.utilizatorNume}"></td>
+            <td th:text="${i.utilizatorEmail}"></td>
+            <td th:text="${i.echipamentNume}"></td>
+            <td th:text="${i.dataStart}"></td>
+            <td th:text="${i.dataFinal}"></td>
+            <td th:text="${i.scop}"></td>
+            <td><span class="badge bg-primary" th:text="${i.status}"></span></td>
+            <td>
+                <form method="post" th:action="@{/admin/status/{id}(id=${i.id})}" class="d-flex gap-1">
+                    <select name="status" class="form-select form-select-sm">
+                        <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s == i.status}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-warning btn-sm">OK</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

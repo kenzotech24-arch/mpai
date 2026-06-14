@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Comenzile mele</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Zona Client</h2>
+    <a href="/home" class="btn btn-secondary btn-sm mb-3">Acasa</a>
+
+    <form method="get" action="/client" class="mb-4">
+        <div class="input-group">
+            <input type="email" name="email" class="form-control" placeholder="Introduceti email-ul dvs." th:value="${email}"/>
+            <button class="btn btn-primary" type="submit">Cauta comenzi</button>
+        </div>
+    </form>
+
+    <div th:if="${mesaj}" class="alert alert-success" th:text="${mesaj}"></div>
+
+    <div th:if="${email != null}">
+        <div th:if="${notificari != null and !notificari.empty}" class="mb-3">
+            <h5>Notificari</h5>
+            <ul class="list-group mb-3">
+                <li class="list-group-item list-group-item-info" th:each="n : ${notificari}">
+                    <span th:text="${n.mesaj}"></span>
+                    <small class="text-muted float-end" th:text="${n.data}"></small>
+                </li>
+            </ul>
+        </div>
+
+        <h5>Comenzile mele</h5>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th><th>Produse</th><th>Data</th><th>Status</th><th>Total</th><th>Actiune</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${comenzi}">
+                <td th:text="${c.id}"></td>
+                <td th:text="${c.produse}"></td>
+                <td th:text="${c.dataComanda}"></td>
+                <td><span class="badge bg-info" th:text="${c.status}"></span></td>
+                <td th:text="${c.total} + ' RON'"></td>
+                <td>
+                    <form th:if="${c.status.name() == 'PLASATA'}" method="post" th:action="@{/client/anuleaza/{id}(id=${c.id})}">
+                        <input type="hidden" name="email" th:value="${email}"/>
+                        <button class="btn btn-danger btn-sm" type="submit">Anuleaza</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h5 class="mt-4">Plaseaza comanda noua</h5>
+        <form method="post" action="/client/adauga">
+            <input type="hidden" th:name="${_csrf != null ? _csrf.parameterName : 'ignore'}" th:value="${_csrf != null ? _csrf.token : ''}"/>
+            <div class="mb-2">
+                <input type="text" name="clientNume" class="form-control" placeholder="Numele dvs." required/>
+            </div>
+            <div class="mb-2">
+                <input type="email" name="clientEmail" class="form-control" placeholder="Email" th:value="${email}" required/>
+            </div>
+            <div class="mb-2">
+                <input type="text" name="produse" class="form-control" placeholder="Produse (ex: Laptop, Mouse)" required/>
+            </div>
+            <div class="mb-2">
+                <input type="number" step="0.01" name="total" class="form-control" placeholder="Total (RON)" required/>
+            </div>
+            <button type="submit" class="btn btn-success">Plaseaza comanda</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

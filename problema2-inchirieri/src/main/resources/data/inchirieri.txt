@@ -1,0 +1,6 @@
+Ion Popescu;ion.popescu@email.com;1;2024-01-10;2024-01-15;Cercetare stiintifica;RETURNATA
+Maria Ion;maria.ion@email.com;2;2024-02-05;2024-02-10;Prezentare scoala;APROBATA
+Andrei Mihai;andrei.mihai@email.com;4;2024-03-01;2024-03-07;Excursie munte;PRELUATA
+Elena Dumitrescu;elena.d@email.com;5;2024-04-10;2024-04-12;Reparatii acasa;CERUUTA
+George Popa;george.popa@email.com;7;2024-05-20;2024-05-21;Masuratori teren;APROBATA
+Ana Stanescu;ana.stanescu@email.com;1;2024-06-01;2024-06-03;Proiect biologie;RESPINSA

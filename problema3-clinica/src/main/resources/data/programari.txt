@@ -1,0 +1,6 @@
+Ion Popescu;ion.popescu@email.com;1;2024-01-15T10:00:00;Dureri in piept;CONFIRMATA
+Maria Ion;maria.ion@email.com;2;2024-02-20T11:30:00;Control copil;EFECTUATA
+Andrei Mihai;andrei.mihai@email.com;3;2024-03-10T09:00:00;Eruptie cutanata;SOLICITATA
+Elena Dumitrescu;elena.d@email.com;4;2024-04-05T14:00:00;Migrene frecvente;CONFIRMATA
+George Popa;george.popa@email.com;5;2024-05-12T08:30:00;Dureri genunchi;SOLICITATA
+Ana Stanescu;ana.stanescu@email.com;6;2024-06-01T16:00:00;Control vedere;ANULATA

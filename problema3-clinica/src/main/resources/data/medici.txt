@@ -1,0 +1,6 @@
+Dr. Ion Popescu;Cardiologie
+Dr. Maria Ionescu;Pediatrie
+Dr. Andrei Stan;Dermatologie
+Dr. Elena Popa;Neurologie
+Dr. George Mihai;Ortopedie
+Dr. Ana Dumitrescu;Oftalmologie

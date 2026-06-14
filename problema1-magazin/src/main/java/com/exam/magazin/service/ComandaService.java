@@ -2,6 +2,8 @@ package com.exam.magazin.service;
 
 import com.exam.magazin.dto.ComandaDTO;
 import com.exam.magazin.dto.NotificareDTO;
+import com.exam.magazin.mapper.ComandaMapper;
+import com.exam.magazin.mapper.NotificareMapper;
 import com.exam.magazin.model.Comanda;
 import com.exam.magazin.model.Notificare;
 import com.exam.magazin.model.StatusComanda;
@@ -18,25 +20,30 @@ public class ComandaService {
 
     private final ComandaRepository comandaRepository;
     private final NotificareRepository notificareRepository;
+    private final ComandaMapper comandaMapper;
+    private final NotificareMapper notificareMapper;
 
-    public ComandaService(ComandaRepository comandaRepository, NotificareRepository notificareRepository) {
+    public ComandaService(ComandaRepository comandaRepository, NotificareRepository notificareRepository,
+                          ComandaMapper comandaMapper, NotificareMapper notificareMapper) {
         this.comandaRepository = comandaRepository;
         this.notificareRepository = notificareRepository;
+        this.comandaMapper = comandaMapper;
+        this.notificareMapper = notificareMapper;
     }
 
     public List<ComandaDTO> getAll() {
-        return comandaRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        return comandaRepository.findAll().stream().map(comandaMapper::toDTO).collect(Collectors.toList());
     }
 
     public List<ComandaDTO> getByEmail(String email) {
-        return comandaRepository.findByClientEmail(email).stream().map(this::toDTO).collect(Collectors.toList());
+        return comandaRepository.findByClientEmail(email).stream().map(comandaMapper::toDTO).collect(Collectors.toList());
     }
 
     public List<ComandaDTO> filter(String email, String status) {
         return comandaRepository.findAll().stream()
                 .filter(c -> email == null || email.isBlank() || c.getClientEmail().equalsIgnoreCase(email))
                 .filter(c -> status == null || status.isBlank() || c.getStatus().name().equalsIgnoreCase(status))
-                .map(this::toDTO)
+                .map(comandaMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -61,29 +68,12 @@ public class ComandaService {
     }
 
     public List<NotificareDTO> getNotificari(String email) {
-        return notificareRepository.findByClientEmailOrderByDataDesc(email).stream().map(n -> {
-            NotificareDTO dto = new NotificareDTO();
-            dto.setId(n.getId());
-            dto.setClientEmail(n.getClientEmail());
-            dto.setMesaj(n.getMesaj());
-            dto.setData(n.getData());
-            return dto;
-        }).collect(Collectors.toList());
+        return notificareRepository.findByClientEmailOrderByDataDesc(email).stream()
+                .map(notificareMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     public void salveazaComanda(Comanda c) {
         comandaRepository.save(c);
-    }
-
-    private ComandaDTO toDTO(Comanda c) {
-        ComandaDTO dto = new ComandaDTO();
-        dto.setId(c.getId());
-        dto.setClientNume(c.getClientNume());
-        dto.setClientEmail(c.getClientEmail());
-        dto.setProduse(c.getProduse());
-        dto.setDataComanda(c.getDataComanda());
-        dto.setStatus(c.getStatus());
-        dto.setTotal(c.getTotal());
-        return dto;
     }
 }

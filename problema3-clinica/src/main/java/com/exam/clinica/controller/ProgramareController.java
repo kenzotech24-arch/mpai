@@ -20,6 +20,11 @@ public class ProgramareController {
         this.medicService = medicService;
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
     public String home() {
         return "home";

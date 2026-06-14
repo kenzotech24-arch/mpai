@@ -20,6 +20,11 @@ public class InchiriereController {
         this.echipamentService = echipamentService;
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
     public String home() {
         return "home";

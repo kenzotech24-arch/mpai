@@ -17,6 +17,11 @@ public class ComandaController {
         this.comandaService = comandaService;
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
     public String home() {
         return "home";

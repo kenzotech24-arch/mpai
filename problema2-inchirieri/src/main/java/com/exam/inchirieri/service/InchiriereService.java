@@ -2,6 +2,8 @@ package com.exam.inchirieri.service;
 
 import com.exam.inchirieri.dto.InchiriereDTO;
 import com.exam.inchirieri.dto.NotificareDTO;
+import com.exam.inchirieri.mapper.InchiriereMapper;
+import com.exam.inchirieri.mapper.NotificareMapper;
 import com.exam.inchirieri.model.Echipament;
 import com.exam.inchirieri.model.Inchiriere;
 import com.exam.inchirieri.model.Notificare;
@@ -11,7 +13,6 @@ import com.exam.inchirieri.repository.NotificareRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class InchiriereService {
@@ -19,21 +20,27 @@ public class InchiriereService {
     private final InchiriereRepository inchiriereRepository;
     private final NotificareRepository notificareRepository;
     private final EchipamentService echipamentService;
+    private final InchiriereMapper inchiriereMapper;
+    private final NotificareMapper notificareMapper;
 
     public InchiriereService(InchiriereRepository inchiriereRepository,
                              NotificareRepository notificareRepository,
-                             EchipamentService echipamentService) {
+                             EchipamentService echipamentService,
+                             InchiriereMapper inchiriereMapper,
+                             NotificareMapper notificareMapper) {
         this.inchiriereRepository = inchiriereRepository;
         this.notificareRepository = notificareRepository;
         this.echipamentService = echipamentService;
+        this.inchiriereMapper = inchiriereMapper;
+        this.notificareMapper = notificareMapper;
     }
 
     public List<InchiriereDTO> getAll() {
-        return inchiriereRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        return inchiriereRepository.findAll().stream().map(inchiriereMapper::toDTO).toList();
     }
 
     public List<InchiriereDTO> getByEmail(String email) {
-        return inchiriereRepository.findByUtilizatorEmail(email).stream().map(this::toDTO).collect(Collectors.toList());
+        return inchiriereRepository.findByUtilizatorEmail(email).stream().map(inchiriereMapper::toDTO).toList();
     }
 
     public List<InchiriereDTO> filter(String email, String status, String echipamentNume) {
@@ -41,8 +48,8 @@ public class InchiriereService {
                 .filter(i -> email == null || email.isBlank() || i.getUtilizatorEmail().equalsIgnoreCase(email))
                 .filter(i -> status == null || status.isBlank() || i.getStatus().name().equalsIgnoreCase(status))
                 .filter(i -> echipamentNume == null || echipamentNume.isBlank() || i.getEchipament().getNume().toLowerCase().contains(echipamentNume.toLowerCase()))
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+                .map(inchiriereMapper::toDTO)
+                .toList();
     }
 
     public void adaugaCerere(InchiriereDTO dto) {
@@ -69,31 +76,12 @@ public class InchiriereService {
     }
 
     public List<NotificareDTO> getNotificari(String email) {
-        return notificareRepository.findByUtilizatorEmailOrderByDataDesc(email).stream().map(n -> {
-            NotificareDTO dto = new NotificareDTO();
-            dto.setId(n.getId());
-            dto.setUtilizatorEmail(n.getUtilizatorEmail());
-            dto.setMesaj(n.getMesaj());
-            dto.setData(n.getData());
-            return dto;
-        }).collect(Collectors.toList());
+        return notificareRepository.findByUtilizatorEmailOrderByDataDesc(email).stream()
+                .map(notificareMapper::toDTO)
+                .toList();
     }
 
     public void salveaza(Inchiriere i) {
         inchiriereRepository.save(i);
-    }
-
-    private InchiriereDTO toDTO(Inchiriere i) {
-        InchiriereDTO dto = new InchiriereDTO();
-        dto.setId(i.getId());
-        dto.setUtilizatorNume(i.getUtilizatorNume());
-        dto.setUtilizatorEmail(i.getUtilizatorEmail());
-        dto.setEchipamentId(i.getEchipament().getId());
-        dto.setEchipamentNume(i.getEchipament().getNume());
-        dto.setDataStart(i.getDataStart());
-        dto.setDataFinal(i.getDataFinal());
-        dto.setScop(i.getScop());
-        dto.setStatus(i.getStatus());
-        return dto;
     }
 }

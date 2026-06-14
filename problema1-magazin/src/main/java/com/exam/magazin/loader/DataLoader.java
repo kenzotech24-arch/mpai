@@ -40,7 +40,6 @@ public class DataLoader implements ApplicationRunner {
             );
             comandaService.salveazaComanda(c);
         }
-
         scanner.close();
     }
 }

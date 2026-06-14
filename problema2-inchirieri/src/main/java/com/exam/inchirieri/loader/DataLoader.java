@@ -7,12 +7,11 @@ import com.exam.inchirieri.service.EchipamentService;
 import com.exam.inchirieri.service.InchiriereService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.time.LocalDate;
+import java.util.Scanner;
 
 @Component
 public class DataLoader implements ApplicationRunner {
@@ -27,28 +26,30 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-                new ClassPathResource("data/echipamente.txt").getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.isBlank()) continue;
-                String[] p = line.split(";");
-                echipamentService.salveazaModel(new Echipament(p[0].trim(), p[1].trim(), Boolean.parseBoolean(p[2].trim())));
-            }
-        }
+        File fisierEchipamente = new File("src/main/resources/data/echipamente.txt");
+        Scanner scanner = new Scanner(fisierEchipamente);
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-                new ClassPathResource("data/inchirieri.txt").getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.isBlank()) continue;
-                String[] p = line.split(";");
-                Echipament e = echipamentService.findById(Long.parseLong(p[2].trim()));
-                Inchiriere i = new Inchiriere(p[0].trim(), p[1].trim(), e,
-                        LocalDate.parse(p[3].trim()), LocalDate.parse(p[4].trim()),
-                        p[5].trim(), StatusInchiriere.valueOf(p[6].trim()));
-                inchiriereService.salveaza(i);
-            }
+        while (scanner.hasNextLine()) {
+            String linie = scanner.nextLine();
+            if (linie.isBlank()) continue;
+            String[] parts = linie.split(";");
+            echipamentService.salveazaModel(new Echipament(parts[0].trim(), parts[1].trim(), Boolean.parseBoolean(parts[2].trim())));
         }
+        scanner.close();
+
+        File fisierInchirieri = new File("src/main/resources/data/inchirieri.txt");
+        Scanner scanner2 = new Scanner(fisierInchirieri);
+
+        while (scanner2.hasNextLine()) {
+            String linie = scanner2.nextLine();
+            if (linie.isBlank()) continue;
+            String[] parts = linie.split(";");
+            Echipament e = echipamentService.findById(Long.parseLong(parts[2].trim()));
+            Inchiriere i = new Inchiriere(parts[0].trim(), parts[1].trim(), e,
+                    LocalDate.parse(parts[3].trim()), LocalDate.parse(parts[4].trim()),
+                    parts[5].trim(), StatusInchiriere.valueOf(parts[6].trim()));
+            inchiriereService.salveaza(i);
+        }
+        scanner2.close();
     }
 }

@@ -1,33 +1,34 @@
 package com.exam.inchirieri.service;
 
 import com.exam.inchirieri.dto.EchipamentDTO;
+import com.exam.inchirieri.mapper.EchipamentMapper;
 import com.exam.inchirieri.model.Echipament;
 import com.exam.inchirieri.repository.EchipamentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EchipamentService {
 
     private final EchipamentRepository echipamentRepository;
+    private final EchipamentMapper echipamentMapper;
 
-    public EchipamentService(EchipamentRepository echipamentRepository) {
+    public EchipamentService(EchipamentRepository echipamentRepository, EchipamentMapper echipamentMapper) {
         this.echipamentRepository = echipamentRepository;
+        this.echipamentMapper = echipamentMapper;
     }
 
     public List<EchipamentDTO> getAll() {
-        return echipamentRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        return echipamentRepository.findAll().stream().map(echipamentMapper::toDTO).toList();
     }
 
     public List<EchipamentDTO> getDisponibile() {
-        return echipamentRepository.findByDisponibil(true).stream().map(this::toDTO).collect(Collectors.toList());
+        return echipamentRepository.findByDisponibil(true).stream().map(echipamentMapper::toDTO).toList();
     }
 
     public void salveaza(EchipamentDTO dto) {
-        Echipament e = new Echipament(dto.getNume(), dto.getDescriere(), dto.isDisponibil());
-        echipamentRepository.save(e);
+        echipamentRepository.save(new Echipament(dto.getNume(), dto.getDescriere(), dto.isDisponibil()));
     }
 
     public void salveazaModel(Echipament e) {
@@ -36,14 +37,5 @@ public class EchipamentService {
 
     public Echipament findById(Long id) {
         return echipamentRepository.findById(id).orElseThrow();
-    }
-
-    private EchipamentDTO toDTO(Echipament e) {
-        EchipamentDTO dto = new EchipamentDTO();
-        dto.setId(e.getId());
-        dto.setNume(e.getNume());
-        dto.setDescriere(e.getDescriere());
-        dto.setDisponibil(e.isDisponibil());
-        return dto;
     }
 }

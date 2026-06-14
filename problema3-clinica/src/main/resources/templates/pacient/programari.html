@@ -3,82 +3,81 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Programarile mele</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
 </head>
 <body>
-<div class="container mt-4">
     <h2>Zona Pacient</h2>
-    <a href="/home" class="btn btn-secondary btn-sm mb-3">Acasa</a>
+    <a href="/home">Acasa</a>
 
-    <form method="get" action="/pacient" class="mb-4">
-        <div class="input-group">
-            <input type="email" name="email" class="form-control" placeholder="Introduceti email-ul dvs." th:value="${email}"/>
-            <button class="btn btn-primary" type="submit">Cauta programari</button>
-        </div>
+    <br/><br/>
+    <form method="get" action="/pacient">
+        <input type="email" name="email" placeholder="Introduceti email-ul dvs." th:value="${email}"/>
+        <button type="submit">Cauta programari</button>
     </form>
 
-    <div th:if="${mesaj}" class="alert alert-success" th:text="${mesaj}"></div>
+    <p th:if="${mesaj}" th:text="${mesaj}"></p>
 
     <div th:if="${email != null}">
-        <div th:if="${notificari != null and !notificari.empty}" class="mb-3">
-            <h5>Notificari</h5>
-            <ul class="list-group mb-3">
-                <li class="list-group-item list-group-item-info" th:each="n : ${notificari}">
-                    <span th:text="${n.mesaj}"></span>
-                    <small class="text-muted float-end" th:text="${n.data}"></small>
+
+        <div th:if="${notificari != null and !notificari.empty}">
+            <h4>Notificari</h4>
+            <ul>
+                <li th:each="n : ${notificari}">
+                    <span th:text="${n.mesaj}"></span> -
+                    <small th:text="${n.data}"></small>
                 </li>
             </ul>
         </div>
 
-        <h5>Programarile mele</h5>
-        <table class="table table-bordered">
+        <h4>Programarile mele</h4>
+        <table border="1">
             <thead>
-            <tr>
-                <th>#</th><th>Medic</th><th>Specialitate</th><th>Data si Ora</th><th>Motiv</th><th>Status</th><th>Actiune</th>
-            </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Medic</th>
+                    <th>Specialitate</th>
+                    <th>Data si Ora</th>
+                    <th>Motiv</th>
+                    <th>Status</th>
+                    <th>Actiune</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="p : ${programari}">
-                <td th:text="${p.id}"></td>
-                <td th:text="${p.medicNume}"></td>
-                <td th:text="${p.medicSpecialitate}"></td>
-                <td th:text="${p.dataOra}"></td>
-                <td th:text="${p.motiv}"></td>
-                <td><span class="badge bg-info" th:text="${p.status}"></span></td>
-                <td>
-                    <form th:if="${p.status.name() == 'SOLICITATA' or p.status.name() == 'CONFIRMATA'}"
-                          method="post" th:action="@{/pacient/anuleaza/{id}(id=${p.id})}">
-                        <input type="hidden" name="email" th:value="${email}"/>
-                        <button class="btn btn-danger btn-sm" type="submit">Anuleaza</button>
-                    </form>
-                </td>
-            </tr>
+                <tr th:each="p : ${programari}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.medicNume}"></td>
+                    <td th:text="${p.medicSpecialitate}"></td>
+                    <td th:text="${p.dataOra}"></td>
+                    <td th:text="${p.motiv}"></td>
+                    <td th:text="${p.status}"></td>
+                    <td>
+                        <form th:if="${p.status.name() == 'SOLICITATA' or p.status.name() == 'CONFIRMATA'}"
+                              method="post" th:action="@{/pacient/anuleaza/{id}(id=${p.id})}">
+                            <input type="hidden" name="email" th:value="${email}"/>
+                            <button type="submit">Anuleaza</button>
+                        </form>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
-        <h5 class="mt-4">Programare noua</h5>
+        <h4>Programare noua</h4>
         <form method="post" action="/pacient/adauga">
-            <div class="mb-2">
-                <input type="text" name="pacientNume" class="form-control" placeholder="Numele dvs." required/>
-            </div>
-            <div class="mb-2">
-                <input type="email" name="pacientEmail" class="form-control" placeholder="Email" th:value="${email}" required/>
-            </div>
-            <div class="mb-2">
-                <select name="medicId" class="form-select" required>
-                    <option value="">-- Selectati medicul --</option>
-                    <option th:each="m : ${medici}" th:value="${m.id}" th:text="${m.nume + ' - ' + m.specialitate}"></option>
-                </select>
-            </div>
-            <div class="mb-2">
-                <input type="datetime-local" name="dataOra" class="form-control" required/>
-            </div>
-            <div class="mb-2">
-                <input type="text" name="motiv" class="form-control" placeholder="Motivul programarii" required/>
-            </div>
-            <button type="submit" class="btn btn-success">Solicita programare</button>
+            <input type="text" name="pacientNume" placeholder="Numele dvs." required/>
+            <br/>
+            <input type="email" name="pacientEmail" placeholder="Email" th:value="${email}" required/>
+            <br/>
+            <select name="medicId" required>
+                <option value="">-- Selectati medicul --</option>
+                <option th:each="m : ${medici}" th:value="${m.id}" th:text="${m.nume + ' - ' + m.specialitate}"></option>
+            </select>
+            <br/>
+            Data si ora: <input type="datetime-local" name="dataOra" required/>
+            <br/>
+            <input type="text" name="motiv" placeholder="Motivul programarii" required/>
+            <br/>
+            <button type="submit">Solicita programare</button>
         </form>
+
     </div>
-</div>
 </body>
 </html>

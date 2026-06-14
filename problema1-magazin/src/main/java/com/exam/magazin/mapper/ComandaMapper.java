@@ -2,10 +2,31 @@ package com.exam.magazin.mapper;
 
 import com.exam.magazin.dto.ComandaDTO;
 import com.exam.magazin.model.Comanda;
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface ComandaMapper {
-    ComandaDTO toDTO(Comanda comanda);
-    Comanda toEntity(ComandaDTO dto);
+@Component
+public class ComandaMapper {
+
+    public ComandaDTO toDTO(Comanda comanda) {
+        ComandaDTO dto = new ComandaDTO();
+        dto.setId(comanda.getId());
+        dto.setClientNume(comanda.getClientNume());
+        dto.setClientEmail(comanda.getClientEmail());
+        dto.setProduse(comanda.getProduse());
+        dto.setDataComanda(comanda.getDataComanda());
+        dto.setStatus(comanda.getStatus());
+        dto.setTotal(comanda.getTotal());
+        return dto;
+    }
+
+    public Comanda toEntity(ComandaDTO dto) {
+        Comanda comanda = new Comanda();
+        comanda.setClientNume(dto.getClientNume());
+        comanda.setClientEmail(dto.getClientEmail());
+        comanda.setProduse(dto.getProduse());
+        comanda.setDataComanda(dto.getDataComanda());
+        comanda.setStatus(dto.getStatus());
+        comanda.setTotal(dto.getTotal());
+        return comanda;
+    }
 }

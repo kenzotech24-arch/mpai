@@ -3,56 +3,56 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Admin - Comenzi</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
 </head>
 <body>
-<div class="container mt-4">
     <h2>Administrator - Comenzi</h2>
-    <a href="/home" class="btn btn-secondary btn-sm mb-3">Acasa</a>
+    <a href="/home">Acasa</a>
 
-    <div th:if="${mesaj}" class="alert alert-success" th:text="${mesaj}"></div>
+    <br/><br/>
+    <p th:if="${mesaj}" th:text="${mesaj}"></p>
 
-    <form method="get" action="/admin/comenzi" class="row g-2 mb-4">
-        <div class="col-md-4">
-            <input type="email" name="email" class="form-control" placeholder="Filtreaza dupa email" th:value="${filterEmail}"/>
-        </div>
-        <div class="col-md-3">
-            <select name="status" class="form-select">
-                <option value="">Toate statusurile</option>
-                <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s.name() == filterStatus}"></option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary">Filtreaza</button>
-        </div>
+    <form method="get" action="/admin/comenzi">
+        <input type="email" name="email" placeholder="Filtreaza dupa email" th:value="${filterEmail}"/>
+        <select name="status">
+            <option value="">Toate statusurile</option>
+            <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s.name() == filterStatus}"></option>
+        </select>
+        <button type="submit">Filtreaza</button>
     </form>
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>#</th><th>Client</th><th>Email</th><th>Produse</th><th>Data</th><th>Status</th><th>Total</th><th>Schimba Status</th>
-        </tr>
+    <br/>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Client</th>
+                <th>Email</th>
+                <th>Produse</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Schimba Status</th>
+            </tr>
         </thead>
         <tbody>
-        <tr th:each="c : ${comenzi}">
-            <td th:text="${c.id}"></td>
-            <td th:text="${c.clientNume}"></td>
-            <td th:text="${c.clientEmail}"></td>
-            <td th:text="${c.produse}"></td>
-            <td th:text="${c.dataComanda}"></td>
-            <td><span class="badge bg-primary" th:text="${c.status}"></span></td>
-            <td th:text="${c.total} + ' RON'"></td>
-            <td>
-                <form method="post" th:action="@{/admin/status/{id}(id=${c.id})}" class="d-flex gap-1">
-                    <select name="status" class="form-select form-select-sm">
-                        <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s == c.status}"></option>
-                    </select>
-                    <button type="submit" class="btn btn-warning btn-sm">OK</button>
-                </form>
-            </td>
-        </tr>
+            <tr th:each="c : ${comenzi}">
+                <td th:text="${c.id}"></td>
+                <td th:text="${c.clientNume}"></td>
+                <td th:text="${c.clientEmail}"></td>
+                <td th:text="${c.produse}"></td>
+                <td th:text="${c.dataComanda}"></td>
+                <td th:text="${c.status}"></td>
+                <td th:text="${c.total} + ' RON'"></td>
+                <td>
+                    <form method="post" th:action="@{/admin/status/{id}(id=${c.id})}">
+                        <select name="status">
+                            <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s == c.status}"></option>
+                        </select>
+                        <button type="submit">OK</button>
+                    </form>
+                </td>
+            </tr>
         </tbody>
     </table>
-</div>
 </body>
 </html>

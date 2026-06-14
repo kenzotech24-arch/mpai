@@ -19,14 +19,4 @@ public class ComandaMapper {
         return dto;
     }
 
-    public Comanda toEntity(ComandaDTO dto) {
-        Comanda comanda = new Comanda();
-        comanda.setClientNume(dto.getClientNume());
-        comanda.setClientEmail(dto.getClientEmail());
-        comanda.setProduse(dto.getProduse());
-        comanda.setDataComanda(dto.getDataComanda());
-        comanda.setStatus(dto.getStatus());
-        comanda.setTotal(dto.getTotal());
-        return comanda;
-    }
 }

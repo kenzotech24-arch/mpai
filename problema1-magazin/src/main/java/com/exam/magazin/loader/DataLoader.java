@@ -5,9 +5,9 @@ import com.exam.magazin.model.StatusComanda;
 import com.exam.magazin.service.ComandaService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -22,8 +22,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        File fisier = new File("src/main/resources/data/comenzi.txt");
-        Scanner scanner = new Scanner(fisier);
+        Scanner scanner = new Scanner(new ClassPathResource("data/comenzi.txt").getInputStream());
 
         while (scanner.hasNextLine()) {
             String linie = scanner.nextLine();

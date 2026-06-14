@@ -7,9 +7,9 @@ import com.exam.clinica.service.MedicService;
 import com.exam.clinica.service.ProgramareService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -26,8 +26,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        File fisierMedici = new File("src/main/resources/data/medici.txt");
-        Scanner scanner = new Scanner(fisierMedici);
+        Scanner scanner = new Scanner(new ClassPathResource("data/medici.txt").getInputStream());
         while (scanner.hasNextLine()) {
             String linie = scanner.nextLine();
             if (linie.isBlank()) continue;
@@ -36,8 +35,7 @@ public class DataLoader implements ApplicationRunner {
         }
         scanner.close();
 
-        File fisierProgramari = new File("src/main/resources/data/programari.txt");
-        Scanner scanner2 = new Scanner(fisierProgramari);
+        Scanner scanner2 = new Scanner(new ClassPathResource("data/programari.txt").getInputStream());
         while (scanner2.hasNextLine()) {
             String linie = scanner2.nextLine();
             if (linie.isBlank()) continue;

@@ -7,9 +7,9 @@ import com.exam.inchirieri.service.EchipamentService;
 import com.exam.inchirieri.service.InchiriereService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -26,9 +26,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        File fisierEchipamente = new File("src/main/resources/data/echipamente.txt");
-        Scanner scanner = new Scanner(fisierEchipamente);
-
+        Scanner scanner = new Scanner(new ClassPathResource("data/echipamente.txt").getInputStream());
         while (scanner.hasNextLine()) {
             String linie = scanner.nextLine();
             if (linie.isBlank()) continue;
@@ -37,9 +35,7 @@ public class DataLoader implements ApplicationRunner {
         }
         scanner.close();
 
-        File fisierInchirieri = new File("src/main/resources/data/inchirieri.txt");
-        Scanner scanner2 = new Scanner(fisierInchirieri);
-
+        Scanner scanner2 = new Scanner(new ClassPathResource("data/inchirieri.txt").getInputStream());
         while (scanner2.hasNextLine()) {
             String linie = scanner2.nextLine();
             if (linie.isBlank()) continue;

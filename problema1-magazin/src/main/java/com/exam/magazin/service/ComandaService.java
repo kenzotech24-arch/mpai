@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ComandaService {
@@ -32,11 +31,11 @@ public class ComandaService {
     }
 
     public List<ComandaDTO> getAll() {
-        return comandaRepository.findAll().stream().map(comandaMapper::toDTO).collect(Collectors.toList());
+        return comandaRepository.findAll().stream().map(comandaMapper::toDTO).toList();
     }
 
     public List<ComandaDTO> getByEmail(String email) {
-        return comandaRepository.findByClientEmail(email).stream().map(comandaMapper::toDTO).collect(Collectors.toList());
+        return comandaRepository.findByClientEmail(email).stream().map(comandaMapper::toDTO).toList();
     }
 
     public List<ComandaDTO> filter(String email, String status) {
@@ -44,7 +43,7 @@ public class ComandaService {
                 .filter(c -> email == null || email.isBlank() || c.getClientEmail().equalsIgnoreCase(email))
                 .filter(c -> status == null || status.isBlank() || c.getStatus().name().equalsIgnoreCase(status))
                 .map(comandaMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void adauga(ComandaDTO dto) {
@@ -70,7 +69,7 @@ public class ComandaService {
     public List<NotificareDTO> getNotificari(String email) {
         return notificareRepository.findByClientEmailOrderByDataDesc(email).stream()
                 .map(notificareMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void salveazaComanda(Comanda c) {

@@ -61,6 +61,9 @@ public class ComandaService {
 
     public void schimbaStatus(Long id, StatusComanda status) {
         Comanda c = comandaRepository.findById(id).orElseThrow();
+        if (c.getStatus() == StatusComanda.LIVRATA || c.getStatus() == StatusComanda.ANULATA) {
+            return;
+        }
         c.setStatus(status);
         comandaRepository.save(c);
         notificareRepository.save(new Notificare(c.getClientEmail(), "Comanda #" + id + " are acum statusul: " + status));

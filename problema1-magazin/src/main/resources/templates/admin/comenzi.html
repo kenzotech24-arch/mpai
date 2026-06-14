@@ -44,12 +44,14 @@
                 <td th:text="${c.status}"></td>
                 <td th:text="${c.total} + ' RON'"></td>
                 <td>
-                    <form method="post" th:action="@{/admin/status/{id}(id=${c.id})}">
+                    <form th:if="${c.status.name() != 'LIVRATA' and c.status.name() != 'ANULATA'}"
+                          method="post" th:action="@{/admin/status/{id}(id=${c.id})}">
                         <select name="status">
                             <option th:each="s : ${statusuri}" th:value="${s}" th:text="${s}" th:selected="${s == c.status}"></option>
                         </select>
                         <button type="submit">OK</button>
                     </form>
+                    <span th:if="${c.status.name() == 'LIVRATA' or c.status.name() == 'ANULATA'}" th:text="${c.status}"></span>
                 </td>
             </tr>
         </tbody>
